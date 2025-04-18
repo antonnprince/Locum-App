@@ -171,7 +171,7 @@ export default function Register() {
           >
             <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
           </TouchableOpacity>
-          {mbbs && <Text className='text-md mb-4'>{mbbs.name}</Text>}
+          {mbbs && <Text className='text-md mb-4'>{mbbs.name} ✔</Text>}
 
           <Text className='font-bold'>Upload CV</Text>
             <TouchableOpacity
@@ -179,7 +179,7 @@ export default function Register() {
            onPress={() => pickDocument(setCv)} >
                         <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
             </TouchableOpacity>
-          {cv && <Text  className='text-md mb-4'>{cv.name}</Text>}
+          {cv && <Text  className='text-md mb-4'>{cv.name} ✔</Text>}
 
           <Text className='font-bold'>Upload Registration Document</Text>
           <TouchableOpacity
@@ -187,7 +187,7 @@ export default function Register() {
            onPress={() => pickDocument(setMedicalRegistrationDoc)} >
             <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
             </TouchableOpacity>
-          {medicalRegistrationDoc && <Text  className='text-md mb-4'>{medicalRegistrationDoc.name}</Text>}
+          {medicalRegistrationDoc && <Text  className='text-md mb-4'>{medicalRegistrationDoc.name} ✔</Text>}
 
           <Text className='font-bold'>Upload Aadhaar Card</Text>
           <TouchableOpacity
@@ -195,7 +195,7 @@ export default function Register() {
            onPress={() => pickDocument(setAadharCard)} >
             <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
             </TouchableOpacity>
-          {aadharCard && <Text  className='text-md mb-4'>{aadharCard.name}</Text>}
+          {aadharCard && <Text  className='text-md mb-4'>{aadharCard.name} ✔</Text>}
 
     </View>
     </ScrollView>
