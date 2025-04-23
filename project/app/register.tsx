@@ -1,12 +1,12 @@
-import { View, Text, ScrollView, TouchableOpacity, TextInput,Button } from 'react-native'
-import { useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, TextInput,Alert } from 'react-native'
+import React,{ useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Picker } from '@react-native-picker/picker';
 import {stateMedicalCouncils} from "../constants/councils"
 import * as DocumentPicker from 'expo-document-picker';
+import { supabase } from '@/utils/supabase';
 
-
-export default function Register() {
+const Register:React.FC=()=> {
 
   const [role,setRole] = useState<string>('physician')
   const[email, setEmail] = useState<string>('')
@@ -23,9 +23,58 @@ export default function Register() {
   const [council, setCouncil] = useState<string>('')
 
 
+
   const router = useRouter()
 
   type userRole = 'physician' | 'clinic'
+
+  const showPasswordAlert = () => {
+    if(!email.trim() || !name.trim() || !phone.trim() || !council.trim() || !registrationNumber || !mbbs
+    ||! cv ||!password ||!confirmpw
+    || !medicalRegistrationDoc
+    || !aadharCard )
+    {
+    Alert.alert(
+      "All fields are mandatory!",
+      "Please fill all fields and try again",
+      [
+        {
+          text: "Cancel",
+          onPress: ()=>{},
+          style: "cancel"
+        },
+        { 
+          text: "OK", 
+          onPress: ()=>{} 
+        }
+      ],
+      { cancelable: false }
+    );
+   }
+   else if(password.trim()!=confirmpw.trim())
+    Alert.alert(
+      "Passwords do not match!",
+      "Make sure passwords match and try again",
+      [
+        {
+          text: "Cancel",
+          onPress: ()=>{},
+          style: "cancel"
+        },
+        { 
+          text: "OK", 
+          onPress: ()=>{} 
+        }
+      ],
+      { cancelable: false }
+    );
+    else{
+      Alert.alert(
+        "Successfully registered on MediShift!"
+      )
+    }
+  }
+
 
   const onRoleChange = (newRole: userRole) => {
     setRole(newRole);
@@ -56,7 +105,6 @@ export default function Register() {
     }
   };
 
-
   return (
     <ScrollView
     showsVerticalScrollIndicator={false}
@@ -66,28 +114,28 @@ export default function Register() {
         <Text className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Create your account
         </Text>
-        <Text className="mt-2 text-center text-sm text-gray-600">
-          Or{' '}
-          <TouchableOpacity 
+        <Text className=" mx-auto text-center text-sm text-gray-600 font-bold">
+          Or
+        </Text>
+        <TouchableOpacity 
           onPress={()=>router.push('/login')}>
-            <Text className='font-medium text-blue-600 hover:text-blue-500 mb-8'>
-              sign in to your existing account
-            </Text>
-            
-            </TouchableOpacity>
-          </Text>
+            <Text className='font-medium text-blue-600 text-center '>
+              Sign in to your existing account
+            </Text>    
+        </TouchableOpacity>
+          
 
-          <View className="flex rounded-md shadow-sm mb-6">
+          <View className="flex flex-row rounded-md shadow-sm my-4">
           <TouchableOpacity
               onPress={() => onRoleChange('physician')}
-              className={`flex-1 py-2 px-4 w-1/2 text-center text-sm font-medium rounded-r-md ${
+              className={`flex-1 py-2 px-4 w-1/2 text-center  font-semibold  ${
                 role === 'physician'
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-700 border border-gray-300'
               }`}
             >
              <Text
-             className='text-center text-sm font-medium'
+             className='text-center text-sm'
              >I'm a Physician</Text> 
             </TouchableOpacity>
             
@@ -171,7 +219,7 @@ export default function Register() {
           >
             <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
           </TouchableOpacity>
-          {mbbs && <Text className='text-md mb-4'>{mbbs.name} ✔</Text>}
+          {mbbs && <Text className='text-sm mb-4 w-full'>{mbbs.name} ✔</Text>}
 
           <Text className='font-bold'>Upload CV</Text>
             <TouchableOpacity
@@ -197,7 +245,17 @@ export default function Register() {
             </TouchableOpacity>
           {aadharCard && <Text  className='text-md mb-4'>{aadharCard.name} ✔</Text>}
 
+          <TouchableOpacity
+          onPress={showPasswordAlert}
+          className=' py-2 px-4 mx-auto my-2 w-full font-semibold bg-blue-600 rounded-lg'
+          >
+            <Text className='text-center font-bold text-white text-xl'>Register</Text>
+          </TouchableOpacity>
+
     </View>
     </ScrollView>
   )
 }
+
+
+export default Register
