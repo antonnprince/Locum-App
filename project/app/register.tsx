@@ -6,6 +6,9 @@ import {stateMedicalCouncils} from "../constants/councils"
 import * as DocumentPicker from 'expo-document-picker';
 import { supabase } from '@/utils/supabase';
 
+// TO DO
+// ADD USER TO SUPABASE
+
 const Register:React.FC=()=> {
 
   const [role,setRole] = useState<string>('physician')
