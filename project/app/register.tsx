@@ -219,7 +219,7 @@ const Register:React.FC=()=> {
           >
             <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
           </TouchableOpacity>
-          {mbbs && <Text className='text-sm mb-4 w-full'>{mbbs.name} ✔</Text>}
+          {mbbs && <Text className='text-sm mb-4 w-full'>{mbbs.name} <Text className='text-green-500'> ✔</Text> </Text>}
 
           <Text className='font-bold'>Upload CV</Text>
             <TouchableOpacity
@@ -227,7 +227,7 @@ const Register:React.FC=()=> {
            onPress={() => pickDocument(setCv)} >
                         <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
             </TouchableOpacity>
-          {cv && <Text  className='text-md mb-4'>{cv.name} ✔</Text>}
+          {cv && <Text  className='text-sm mb-4 w-full'>{cv.name} <Text className='text-green-500'> ✔</Text></Text>}
 
           <Text className='font-bold'>Upload Registration Document</Text>
           <TouchableOpacity
@@ -235,7 +235,7 @@ const Register:React.FC=()=> {
            onPress={() => pickDocument(setMedicalRegistrationDoc)} >
             <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
             </TouchableOpacity>
-          {medicalRegistrationDoc && <Text  className='text-md mb-4'>{medicalRegistrationDoc.name} ✔</Text>}
+          {medicalRegistrationDoc && <Text  className='text-sm mb-4 w-full'>{medicalRegistrationDoc.name} <Text className='text-green-500'> ✔</Text></Text>}
 
           <Text className='font-bold'>Upload Aadhaar Card</Text>
           <TouchableOpacity
@@ -243,7 +243,7 @@ const Register:React.FC=()=> {
            onPress={() => pickDocument(setAadharCard)} >
             <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
             </TouchableOpacity>
-          {aadharCard && <Text  className='text-md mb-4'>{aadharCard.name} ✔</Text>}
+          {aadharCard && <Text  className='text-sm mb-4 w-full'>{aadharCard.name}<Text className='text-green-500'> ✔</Text></Text>}
 
           <TouchableOpacity
           onPress={showPasswordAlert}
