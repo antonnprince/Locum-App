@@ -8,9 +8,10 @@ import { supabase } from '@/utils/supabase';
 
 // TO DO
 // ADD USER TO SUPABASE
+// CREATE STRUCTURED FOLDER FOR NAVIGATION
+
 
 const Register:React.FC=()=> {
-
   const [role,setRole] = useState<string>('physician')
   const[email, setEmail] = useState<string>('')
   const[password, setPassword] = useState<string>('')
@@ -31,7 +32,7 @@ const Register:React.FC=()=> {
 
   type userRole = 'physician' | 'clinic'
 
-  const showPasswordAlert = () => {
+  const showPasswordAlert = ():void => {
     if(!email.trim() || !name.trim() || !phone.trim() || !council.trim() || !registrationNumber || !mbbs
     ||! cv ||!password ||!confirmpw
     || !medicalRegistrationDoc
@@ -79,7 +80,7 @@ const Register:React.FC=()=> {
   }
 
 
-  const onRoleChange = (newRole: userRole) => {
+  const onRoleChange = (newRole: userRole):void => {
     setRole(newRole);
     setEmail('')
     setPassword('')
@@ -107,6 +108,14 @@ const Register:React.FC=()=> {
       console.warn("Document pick error:", err);
     }
   };
+
+  const userReg = async(email:string, password:string)=>{
+    const {data, error} = await supabase.auth.signUp({email, password})
+    if(data)
+      console.log(data)
+    else if(error)
+      console.log(error)
+  }
 
   return (
     <ScrollView
@@ -159,7 +168,7 @@ const Register:React.FC=()=> {
           <Text className='font-bold'>Email address</Text>
           <TextInput 
           value={email}
-          onChangeText={(text)=>{setEmail(text), console.log(text)}}
+          onChangeText={(text)=>{setEmail(text)}}
           className='h-10 w-full border border-stone-400 rounded-lg mb-4 focus:outline-none p-2' />
 
           <Text className='font-bold'>Password</Text>
@@ -249,7 +258,9 @@ const Register:React.FC=()=> {
           {aadharCard && <Text  className='text-sm mb-4 w-full'>{aadharCard.name}<Text className='text-green-500'> ✔</Text></Text>}
 
           <TouchableOpacity
-          onPress={showPasswordAlert}
+            onPress={() => {
+              userReg(email, password);
+            }}
           className=' py-2 px-4 mx-auto my-2 w-full font-semibold bg-blue-600 rounded-lg'
           >
             <Text className='text-center font-bold text-white text-xl'>Register</Text>
