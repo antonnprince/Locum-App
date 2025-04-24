@@ -109,13 +109,19 @@ const Register:React.FC=()=> {
     }
   };
 
-  const userReg = async(email:string, password:string)=>{
-    const {data, error} = await supabase.auth.signUp({email, password})
-    if(data)
-      console.log(data)
-    else if(error)
-      console.log(error)
-  }
+  const userReg = async (email: string, password: string) => {
+    // console.log(email +" " +typeof email, password+" "+typeof password)
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+  
+    if (data) {
+      console.log("Login Success:", data);
+    } else if (error) {
+      console.error("Login Error:", error.message, error);
+    }
+  };
 
   return (
     <ScrollView
@@ -168,7 +174,7 @@ const Register:React.FC=()=> {
           <Text className='font-bold'>Email address</Text>
           <TextInput 
           value={email}
-          onChangeText={(text)=>{setEmail(text)}}
+          onChangeText={(text)=>{setEmail(text), console.log(text)}}
           className='h-10 w-full border border-stone-400 rounded-lg mb-4 focus:outline-none p-2' />
 
           <Text className='font-bold'>Password</Text>
