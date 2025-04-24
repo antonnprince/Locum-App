@@ -2,13 +2,12 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput,Alert } from 'react
 import React,{ useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Picker } from '@react-native-picker/picker';
-import {stateMedicalCouncils} from "../constants/councils"
+import {stateMedicalCouncils} from "../../constants/councils"
 import * as DocumentPicker from 'expo-document-picker';
 import { supabase } from '@/utils/supabase';
 
 // TO DO
-// ADD USER TO SUPABASE
-// CREATE STRUCTURED FOLDER FOR NAVIGATION
+// Add user's details to physician table after successfull signup
 
 
 const Register:React.FC=()=> {
@@ -110,7 +109,7 @@ const Register:React.FC=()=> {
   };
 
   const userReg = async (email: string, password: string) => {
-    // console.log(email +" " +typeof email, password+" "+typeof password)
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
