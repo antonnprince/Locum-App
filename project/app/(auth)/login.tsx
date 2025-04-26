@@ -1,13 +1,27 @@
 import React,{useState} from 'react';
 import { View, Text, ScrollView, TouchableOpacity,TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
+import { supabase } from '@/utils/supabase';
 const Login = () => {
 
   const router = useRouter()
     const[email, setEmail] = useState<string>('')
     const[password, setPassword] = useState<string>('')
 
-  return (
+  const handleLogin = async (email:string, password:string) => {
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    })
+    if (error) {
+      alert(error.message)
+    } else {
+      router.push('/profiles')
+      console.log('Login successful:', data)}}
+
+
+    return (
      <ScrollView
         showsVerticalScrollIndicator={false}
         >
@@ -41,7 +55,7 @@ const Login = () => {
                       className='h-10 w-full border border-stone-400 rounded-lg mb-4 focus:outline-none p-2' />
 
                       <TouchableOpacity
-                      onPress={()=>{}}
+                      onPress={()=>{handleLogin(email,password)}}
                     className=' py-2 px-4 mx-auto my-2 w-full font-semibold bg-blue-600 rounded-lg'
                     >
                       <Text className='text-center font-bold text-white text-xl'>Sign In</Text>
@@ -61,4 +75,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login

@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import { View, Text, ScrollView, TouchableOpacity,TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
-const Login = () => {
+const adminLogin = () => {
 
   const router = useRouter()
     const[email, setEmail] = useState<string>('')
@@ -45,7 +45,7 @@ const Login = () => {
 
                       <TouchableOpacity
                       onPress={()=>{}}
-                    className=' py-2 px-4 mx-auto bg-[#a800b7] my-2 w-full font-semibold bg-blue-600 rounded-lg'
+                    className=' py-2 px-4 mx-auto bg-[#a800b7] my-2 w-full font-semibold rounded-lg'
                     >
                       <Text className='text-center font-bold text-white text-lg'>Sign In As Admin</Text>
                     </TouchableOpacity>
@@ -56,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default adminLogin;
