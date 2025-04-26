@@ -136,7 +136,7 @@ const Register:React.FC=()=> {
         </Text>
         <TouchableOpacity 
           onPress={()=>router.push('/login')}>
-            <Text className='font-medium text-blue-600 text-center '>
+            <Text className='font-extrabold text-blue-600 text-center '>
               Sign in to your existing account
             </Text>    
         </TouchableOpacity>
