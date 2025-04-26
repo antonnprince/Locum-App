@@ -108,11 +108,11 @@ const Register:React.FC=()=> {
     }
   };
 
-  const userReg = async (email: string, password: string) => {
-
+  const userReg = async (e: string, p: string) => {
+   
     const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
+      email:e,
+      password:p,
     });
   
     if (data) {
@@ -173,7 +173,7 @@ const Register:React.FC=()=> {
           <Text className='font-bold'>Email address</Text>
           <TextInput 
           value={email}
-          onChangeText={(text)=>{setEmail(text), console.log(text)}}
+          onChangeText={(text)=>setEmail(text)}
           className='h-10 w-full border border-stone-400 rounded-lg mb-4 focus:outline-none p-2' />
 
           <Text className='font-bold'>Password</Text>
@@ -270,6 +270,8 @@ const Register:React.FC=()=> {
           >
             <Text className='text-center font-bold text-white text-xl'>Register</Text>
           </TouchableOpacity>
+
+
 
     </View>
     </ScrollView>
