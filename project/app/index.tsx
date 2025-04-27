@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./global.css";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/utils/supabase";
-import { Image } from "react-native";
+import { Image, Text } from "react-native";
 // import loaderComponent from "../assets/loader.svg"
 
 
@@ -13,7 +13,7 @@ export default function Index() {
 
 
   useEffect(() => { 
-    
+
     setLoading(true);
     supabase.auth.getSession().then(
      
@@ -35,10 +35,17 @@ export default function Index() {
       if (loading) {
         return(
           <Image
-          source={require('../assets/loader.svg')}
-          style={{ width: "50%", height: "50%", position: "absolute", justifyContent: "center", alignSelf: "center"}}
-          resizeMode="contain"
+          source={require('../assets/loader.png')}
+           style={{ width: "50%", height: "50%",
+              position: "absolute",
+               justifyContent: "center",
+               marginTop: "50%",
+               alignSelf: "center", flex:1}}
+              resizeMode="contain"
+            
+            className="animate-spin"
         />
+        
         )
       }
       else if (session) {
