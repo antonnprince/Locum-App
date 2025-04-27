@@ -7,7 +7,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import { supabase } from '@/utils/supabase';
 
 // TO DO
-// Add user's details to physician table after successfull signup
+// Add Loading SPinners
+// Add toast notifications for success and 
 
 
 const Register:React.FC=()=> {
