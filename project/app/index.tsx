@@ -4,6 +4,7 @@ import "./global.css";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/utils/supabase";
 import { Image, Text } from "react-native";
+
 // import loaderComponent from "../assets/loader.svg"
 
 
@@ -48,7 +49,7 @@ export default function Index() {
         
         )
       }
-      else if (session) {
+       if (session) {
         return <Redirect href="/profiles" />;
       } else {
         return <Redirect href="/login" />;
