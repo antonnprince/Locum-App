@@ -2,6 +2,8 @@ import React,{useState} from 'react';
 import { View, Text, ScrollView, TouchableOpacity,TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import { supabase } from '@/utils/supabase';
+import Toast from 'react-native-toast-message';
+
 const Login = () => {
 
   const router = useRouter()
@@ -15,7 +17,15 @@ const Login = () => {
       password: password,
     })
     if (error) {
-      alert(error.message)
+      Toast.show({
+                type: "error",  // type of toast ('success', 'error', 'info', etc.)
+                position: "top",  // position of the toast ('top', 'bottom', 'center')
+                text1: error.message,  // main message text
+                text2: "Try again",  // secondary text (optional)
+                visibilityTime: 3000,  // time to display the toast (in milliseconds)
+                autoHide: true,  // auto hide after some time
+              })
+
     } else {
       router.push('/profiles')
       console.log('Login successful:', data)}}

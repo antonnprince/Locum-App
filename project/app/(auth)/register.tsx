@@ -10,7 +10,7 @@ import Toast from "react-native-toast-message";
 // TO DO
 
 // Store pdfs in bucket and save the url in the database
-
+// Date picker for registration date
 
 
 
@@ -35,6 +35,38 @@ const Register:React.FC=()=> {
 
   type userRole = 'physician' | 'clinic'
 
+  const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physicianId: string | undefined) => {
+    try {
+      const uploadedFiles = [];
+  
+      for (const file of files) {
+        if (!file || !file.uri || !physicianId) continue;
+  
+        // Correct: use file.name
+        const filePath = `${physicianId}/${file.name}`;
+  
+        // Convert URI to Blob
+        const fileBlob = await fetch(file.uri).then(res => res.blob());
+ 
+        // Upload to correct bucket
+        const { data, error } = await supabase
+          .storage
+          .from('physicians')
+          .upload(filePath, fileBlob, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+  
+        if (error) {
+          console.error(`Error uploading ${file.name}:`, error.message);
+          continue;
+        }
+      }
+    } catch (error) {
+      console.error('Error uploading PDFs:', error);
+    }
+  };
+  
 
   const userReg = async (e: string, p: string) : Promise<void> => {
     if(!email.trim() || !name.trim() || !phone.trim() || !council.trim() || !registrationNumber || !mbbs
@@ -97,8 +129,8 @@ const Register:React.FC=()=> {
 
         ]
       )
-        console.log("Physician data added to table:", result, error)
-        // console.log("Registration Success:", data);
+
+      uploadPDFs([mbbs, cv, medicalRegistrationDoc, aadharCard], data?.user?.id)
         Toast.show({
           type: "info",  // type of toast ('success', 'error', 'info', etc.)
           position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -124,8 +156,8 @@ const Register:React.FC=()=> {
     
   };
 
-
-
+ 
+  
   const onRoleChange = (newRole: userRole):void => {
     setRole(newRole);
     setEmail('')
