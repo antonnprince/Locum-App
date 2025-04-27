@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, TextInput,Alert } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, TextInput,Image  } from 'react-native'
 import React,{ useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Picker } from '@react-native-picker/picker';
@@ -6,7 +6,8 @@ import {stateMedicalCouncils} from "../../constants/councils"
 import * as DocumentPicker from 'expo-document-picker';
 import { supabase } from '@/utils/supabase';
 import Toast from "react-native-toast-message";
-
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Loader from '../components/Loader';
 // TO DO
 
 // Store pdfs in bucket and save the url in the database
@@ -28,9 +29,9 @@ const Register:React.FC=()=> {
   const [medicalRegistrationDoc, setMedicalRegistrationDoc] = useState<DocumentPicker.DocumentPickerAsset | null>(null);
   const [aadharCard, setAadharCard] = useState<DocumentPicker.DocumentPickerAsset | null>(null);
   const [council, setCouncil] = useState<string>('')
-
+  const [show, setShow] = useState<Boolean>(false);
+  const [loading,setLoading] = useState<Boolean>(false)
   
-
   const router = useRouter()
 
   type userRole = 'physician' | 'clinic'
@@ -69,11 +70,13 @@ const Register:React.FC=()=> {
   
 
   const userReg = async (e: string, p: string) : Promise<void> => {
+    setLoading(true)
     if(!email.trim() || !name.trim() || !phone.trim() || !council.trim() || !registrationNumber || !mbbs
     ||! cv ||!password ||!confirmpw
     || !medicalRegistrationDoc
     || !aadharCard )
     {
+      setLoading(false)
       Toast.show({
         type: "error",  // type of toast ('success', 'error', 'info', etc.)
         position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -82,10 +85,12 @@ const Register:React.FC=()=> {
         visibilityTime: 3000,  // time to display the toast (in milliseconds)
         autoHide: true,  // auto hide after some time
       });
+      
       return
     }
     else if(password.length<6)
     {
+      setLoading(false)
       Toast.show({
         type: "error",  // type of toast ('success', 'error', 'info', etc.)
         position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -98,6 +103,7 @@ const Register:React.FC=()=> {
     }
     else if(password.trim()!=confirmpw.trim())
     {
+      setLoading(false)
       Toast.show({
         type: "error",  // type of toast ('success', 'error', 'info', etc.)
         position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -108,9 +114,22 @@ const Register:React.FC=()=> {
       });
       return
     }
-
-    else
+    else if(phone.length<10)
     {
+      setLoading(false)
+      Toast.show({
+        type: "error",  // type of toast ('success', 'error', 'info', etc.)
+        position: "top",  // position of the toast ('top', 'bottom', 'center')
+        text1: "Invalid Phone Number!",  // main message text
+        text2: "Make sure the phone number is valid and try again",  // secondary text (optional)
+        visibilityTime: 3000,  // time to display the toast (in milliseconds)
+        autoHide: true,  // auto hide after some time
+      });
+      return    
+    }
+    else
+    { 
+
       const { data, error } = await supabase.auth.signUp({
         email:e,
         password:p,
@@ -131,6 +150,7 @@ const Register:React.FC=()=> {
       )
 
       uploadPDFs([mbbs, cv, medicalRegistrationDoc, aadharCard], data?.user?.id)
+      setLoading(false)
         Toast.show({
           type: "info",  // type of toast ('success', 'error', 'info', etc.)
           position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -150,6 +170,7 @@ const Register:React.FC=()=> {
           visibilityTime: 3000,  // time to display the toast (in milliseconds)
           autoHide: true,  // auto hide after some time
         });
+        setLoading(false) 
         console.error("Login Error:", error.message, error);
       }
     }
@@ -290,14 +311,34 @@ const Register:React.FC=()=> {
             
           </Picker>
 
+
           <Text className='font-bold'>State Registration Number</Text>
           <TextInput 
           value={registrationNumber}
           onChangeText={(text)=>setRegistrationNumber(text)}
           className='h-10 w-full border border-stone-400 rounded-lg mb-4 focus:outline-none p-2' />
 
-          {/* <Text className='font-bold'>Registration Date</Text> */}
-          
+          <TouchableOpacity
+            onPress={() => setShow(true)}
+            className='rounded-lg my-4 '>
+            <Text className='font-bold'>Click to choose Registration Date</Text>
+              {
+                show &&
+                <DateTimePicker
+                value={registrationDate}
+                mode="date"  // 'date' | 'time' | 'datetime'
+                display="calendar"  // default, spinner, calendar, clock
+                onChange={(event, selectedDate) => {
+                  setShow(false);
+                  if (selectedDate) {
+                    setRegistrationDate(selectedDate);
+                    console.log( typeof selectedDate," :", selectedDate);
+                   
+                  }}
+                }
+              />
+              }
+        </TouchableOpacity>
           
 
           <Text className='font-extrabold'>Upload MBBS Certificate (PDF only)</Text>
@@ -334,15 +375,16 @@ const Register:React.FC=()=> {
           {aadharCard && <Text  className='text-sm mb-4 w-full'>{aadharCard.name}<Text className='text-green-500'> ✔</Text></Text>}
 
           <TouchableOpacity
-            // onPress={() => {
-            //   userReg(email, password);
-            // }}
             onPress= {()=>userReg(email, password)}
           className=' py-2 px-4 mx-auto my-2 w-full font-semibold bg-blue-600 rounded-lg'
           >
             <Text className='text-center font-bold text-white text-xl'>Register</Text>
           </TouchableOpacity>
 
+          {
+              loading && 
+              <Loader/>
+            }
 
 
     </View>

@@ -3,20 +3,24 @@ import { View, Text, ScrollView, TouchableOpacity,TextInput } from 'react-native
 import { useRouter } from 'expo-router';
 import { supabase } from '@/utils/supabase';
 import Toast from 'react-native-toast-message';
+import Loader from '../components/Loader';
 
 const Login = () => {
 
   const router = useRouter()
     const[email, setEmail] = useState<string>('')
     const[password, setPassword] = useState<string>('')
+    const [loading, setLoading] = useState(false)
+
 
   const handleLogin = async (email:string, password:string) => {
-
+    setLoading(true)
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     })
     if (error) {
+      setLoading(false)
       Toast.show({
                 type: "error",  // type of toast ('success', 'error', 'info', etc.)
                 position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -26,9 +30,11 @@ const Login = () => {
                 autoHide: true,  // auto hide after some time
               })
 
-    } else {
+    } 
+    else {
       router.push('/profiles')
-      console.log('Login successful:', data)}}
+     }
+  }
 
 
     return (
@@ -80,6 +86,10 @@ const Login = () => {
                         </Text> Admin Login
                       </Text>
                     </TouchableOpacity>
+                    {
+                      loading && ( <Loader />)
+
+                    }
     </View>
     </ScrollView>
   );
