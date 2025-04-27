@@ -7,7 +7,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import { supabase } from '@/utils/supabase';
 
 // TO DO
-// Add user's details to physician table after successfull signup
+// Add Loading SPinners
+// Add toast notifications for success and 
 
 
 const Register:React.FC=()=> {
@@ -136,7 +137,7 @@ const Register:React.FC=()=> {
         </Text>
         <TouchableOpacity 
           onPress={()=>router.push('/login')}>
-            <Text className='font-medium text-blue-600 text-center '>
+            <Text className='font-extrabold text-blue-600 text-center '>
               Sign in to your existing account
             </Text>    
         </TouchableOpacity>
