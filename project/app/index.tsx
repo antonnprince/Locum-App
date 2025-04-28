@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import "./global.css";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/utils/supabase";
-import { Image, Text } from "react-native";
-
+import { Image } from "react-native";
+import Loader from "./components/Loader";
 // import loaderComponent from "../assets/loader.svg"
 
 
@@ -35,18 +35,7 @@ export default function Index() {
 
       if (loading) {
         return(
-          <Image
-          source={require('../assets/loader.png')}
-           style={{ width: "50%", height: "50%",
-              position: "absolute",
-               justifyContent: "center",
-               marginTop: "50%",
-               alignSelf: "center", flex:1}}
-              resizeMode="contain"
-            
-            className="animate-spin"
-        />
-        
+          <Loader/>
         )
       }
        if (session) {

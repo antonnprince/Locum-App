@@ -30,7 +30,7 @@ const Register:React.FC=()=> {
   const [aadharCard, setAadharCard] = useState<DocumentPicker.DocumentPickerAsset | null>(null);
   const [council, setCouncil] = useState<string>('')
   const [show, setShow] = useState<Boolean>(false);
-  const [loading,setLoading] = useState<Boolean>(false)
+  const [loading,setLoading] = useState<boolean>(false)
   
   const router = useRouter()
 
@@ -324,19 +324,19 @@ const Register:React.FC=()=> {
             <Text className='font-bold'>Click to choose Registration Date</Text>
               {
                 show &&
-                <DateTimePicker
-                value={registrationDate}
-                mode="date"  // 'date' | 'time' | 'datetime'
-                display="calendar"  // default, spinner, calendar, clock
-                onChange={(event, selectedDate) => {
-                  setShow(false);
-                  if (selectedDate) {
-                    setRegistrationDate(selectedDate);
-                    console.log( typeof selectedDate," :", selectedDate);
-                   
-                  }}
-                }
-              />
+                  <DateTimePicker
+                  value={registrationDate}
+                  mode="date"  // 'date' | 'time' | 'datetime'
+                  display="calendar"  // default, spinner, calendar, clock
+                  onChange={(event, selectedDate) => {
+                    setShow(false);
+                    if (selectedDate) {
+                      setRegistrationDate(selectedDate);
+                      console.log( typeof selectedDate," :", selectedDate);
+                    
+                    }}
+                  }
+                />
               }
         </TouchableOpacity>
           
@@ -375,13 +375,14 @@ const Register:React.FC=()=> {
           {aadharCard && <Text  className='text-sm mb-4 w-full'>{aadharCard.name}<Text className='text-green-500'> ✔</Text></Text>}
 
           <TouchableOpacity
+            disabled={loading}
             onPress= {()=>userReg(email, password)}
           className=' py-2 px-4 mx-auto my-2 w-full font-semibold bg-blue-600 rounded-lg'
           >
             <Text className='text-center font-bold text-white text-xl'>Register</Text>
           </TouchableOpacity>
 
-          {
+            {
               loading && 
               <Loader/>
             }
