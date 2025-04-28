@@ -114,7 +114,7 @@ const Register:React.FC=()=> {
       });
       return
     }
-    else if(phone.length<10)
+    else if(phone.length!=10)
     {
       setLoading(false)
       Toast.show({
