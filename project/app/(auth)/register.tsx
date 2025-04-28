@@ -143,6 +143,7 @@ const Register:React.FC=()=> {
           email: email,
           state_medical_council: council,
           reg_no: registrationNumber,
+          reg_date: registrationDate,
           phone_no: phone,
          }
 
