@@ -78,6 +78,7 @@ const Login = () => {
                     </TouchableOpacity>
 
                     <TouchableOpacity 
+                    disabled={loading}
                     onPress={()=>router.push('/adminLogin')}
                     className='bg-[#d6d3d1] w-fit mx-auto my-4 py-2 px-4 rounded-lg'>
                       <Text className='text-[#8a0194] font-semibold text-center'>
