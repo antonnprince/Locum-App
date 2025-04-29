@@ -8,10 +8,8 @@ import { supabase } from '@/utils/supabase';
 import Toast from "react-native-toast-message";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Loader from '../components/Loader';
-// TO DO
+import * as FileSystem from 'expo-file-system';
 
-// Store pdfs in bucket and save the url in the database
-// Date picker for registration date
 
 
 
@@ -36,37 +34,36 @@ const Register:React.FC=()=> {
 
   type userRole = 'physician' | 'clinic'
 
-  const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physicianId: string | undefined) => {
-    try {
-      const uploadedFiles = [];
   
-      for (const file of files) {
-        if (!file || !file.uri || !physicianId) continue;
-  
-        // Correct: use file.name
-        const filePath = `${physicianId}/${file.name}`;
-  
-        // Convert URI to Blob
-        const fileBlob = await fetch(file.uri).then(res => res.blob());
- 
-        // Upload to correct bucket
-        const { data, error } = await supabase
-          .storage
-          .from('physicians')
-          .upload(filePath, fileBlob, {
-            cacheControl: '3600',
-            upsert: false,
-          });
-  
-        if (error) {
-          console.error(`Error uploading ${file.name}:`, error.message);
-          continue;
-        }
+const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physicianId: string | undefined) => {
+  try {
+    for (const file of files) {
+      if (!file || !file.uri || !physicianId) continue;
+
+      const filePath = `${physicianId}/${file.name}`;
+
+      // Read file as base64
+      const fileData = await FileSystem.readAsStringAsync(file.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const { data, error } = await supabase
+        .storage
+        .from('physicians')
+        .upload(filePath, fileData, {
+          contentType: 'application/pdf',   // important
+          upsert: false,
+        });
+
+      if (error) {
+        console.error(`Error uploading ${file.name}:`, error.message);
+        continue;
       }
-    } catch (error) {
-      console.error('Error uploading PDFs:', error);
     }
-  };
+  } catch (error) {
+    console.error('Error uploading PDFs:', error);
+  }
+};
   
 
   const userReg = async (e: string, p: string) : Promise<void> => {
@@ -114,7 +111,7 @@ const Register:React.FC=()=> {
       });
       return
     }
-    else if(phone.length<10)
+    else if(phone.length!=10)
     {
       setLoading(false)
       Toast.show({
@@ -127,8 +124,26 @@ const Register:React.FC=()=> {
       });
       return    
     }
+    
     else
     { 
+      const { data:result, error:err } = await supabase
+          .from('physicians')
+          .select('email')
+          .eq('email', email);
+
+        if (result && result.length > 0) {
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Email already exists!",
+            text2: "Please use a different email address",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          setLoading(false);
+          return;
+        }
 
       const { data, error } = await supabase.auth.signUp({
         email:e,
@@ -143,6 +158,7 @@ const Register:React.FC=()=> {
           email: email,
           state_medical_council: council,
           reg_no: registrationNumber,
+          reg_date: registrationDate,
           phone_no: phone,
          }
 
@@ -150,6 +166,7 @@ const Register:React.FC=()=> {
       )
 
       uploadPDFs([mbbs, cv, medicalRegistrationDoc, aadharCard], data?.user?.id)
+
       setLoading(false)
         Toast.show({
           type: "info",  // type of toast ('success', 'error', 'info', etc.)
@@ -160,8 +177,10 @@ const Register:React.FC=()=> {
           autoHide: true,  // auto hide after some time
         });
         
-      } 
+      }        
+
       else if (error) {
+        console.log(error)
         Toast.show({
           type: "error",  // type of toast ('success', 'error', 'info', etc.)
           position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -170,8 +189,8 @@ const Register:React.FC=()=> {
           visibilityTime: 3000,  // time to display the toast (in milliseconds)
           autoHide: true,  // auto hide after some time
         });
+        console.log("Error:", error.message, error);    
         setLoading(false) 
-        console.error("Login Error:", error.message, error);
       }
     }
     
@@ -320,7 +339,7 @@ const Register:React.FC=()=> {
 
           <TouchableOpacity
             onPress={() => setShow(true)}
-            className='rounded-lg my-4 '>
+            className='rounded-lg '>
             <Text className='font-bold'>Click to choose Registration Date</Text>
               {
                 show &&
@@ -337,6 +356,10 @@ const Register:React.FC=()=> {
                     }}
                   }
                 />
+              }
+              {
+                registrationDate &&
+                <Text className='text-sm mb-4 w-full'>{registrationDate.toLocaleDateString()}<Text className='text-green-500'> ✔</Text></Text>
               }
         </TouchableOpacity>
           
