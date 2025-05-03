@@ -9,22 +9,16 @@ interface AuthContextType {
   fetchSession: () => Promise<void>;
 }
 
-// 2. Create context with proper type
 const AuthContext = createContext<AuthContextType | null>(null); // Ensure this is correctly defined and used
 
-// 3. Define props type for provider
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-// 4. AuthProvider with correct types
 export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const getUserDetails = async() : Promise<void>=>{
-    setSession(null)
-  }
   const fetchSession = async () => {
     setLoading(true);
 
@@ -36,9 +30,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   useEffect(() => {
-    fetchSession(); // Fetch on app load
 
+    fetchSession(); 
+
+    console.log("Fetching session..."); 
+    
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("Auth state changed:", _event, session); // Log the event and session
       setSession(session);
     });
 

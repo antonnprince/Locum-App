@@ -5,32 +5,17 @@ import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/utils/supabase";
 import { Image } from "react-native";
 import Loader from "./components/Loader";
-// import loaderComponent from "../assets/loader.svg"
+import { useAuth } from "@/hooks/useSessionContext";
 
 
 export default function Index() {
-  const [session, setSession] = useState<Session | null | undefined>(undefined); // <-- notice undefined initially
-  const [loading, setLoading] = useState(true);
+  const {session, loading, fetchSession} = useAuth()
 
 
   useEffect(() => { 
-
-    setLoading(true);
-    supabase.auth.getSession().then(
-     
-      ( { data: { session } }) => {
-      setSession(session);
-      }
-    )
-    setLoading(false);
+    fetchSession()
+    console.log("Session from index: ",session)
     
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => {
-      listener.subscription.unsubscribe(); // clean up auth listener!
-    }
   }, []);
 
       if (loading) {
@@ -38,9 +23,10 @@ export default function Index() {
           <Loader/>
         )
       }
-       if (session) {
+       if (session!=null) {
         return <Redirect href="/profiles" />;
-      } else {
+      } 
+      else {
         return <Redirect href="/login" />;
       }
 }
