@@ -45,6 +45,7 @@ const router = useRouter()
         onPress={handleSignOut}
         className=' py-2 px-4 mx-auto my-2 w-full font-semibold bg-blue-600 rounded-lg'>
         <Text className='text-center font-bold text-white text-lg'>Sign Out</Text>
+        
         </TouchableOpacity>
     </div>
   )
