@@ -5,7 +5,6 @@ import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/utils/supabase";
 import { Image } from "react-native";
 import Loader from "./components/Loader";
-// import loaderComponent from "../assets/loader.svg"
 
 
 export default function Index() {

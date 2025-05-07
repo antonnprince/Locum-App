@@ -269,7 +269,7 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
       const {data:result, error} = await supabase.from('clinic').insert([
        { 
         clinic_id:data?.user?.id,
-        name: name,
+        name: clinicName,
         email: email,
         address: address, 
        }
