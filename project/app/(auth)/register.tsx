@@ -507,7 +507,11 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
                 <Text className='border border-stone-400 self-start px-2 py-1 rounded-lg'>Browse ➤</Text>
                 </TouchableOpacity>
               {aadharCard && <Text  className='text-sm mb-4 w-full'>{aadharCard.name}<Text className='text-green-500'> ✔</Text></Text>}
-
+              <Text>
+              On signing up, you agree to our 
+              <Text className='text-blue-600'> Terms of Service </Text>
+               and <Text className='text-blue-600'> Privacy Policy</Text>
+            </Text>
               <TouchableOpacity
                 disabled={loading}
                 onPress= {()=>physicianRegister(email, password)}
@@ -529,6 +533,11 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
               onChangeText={(text)=>setAddress(text)}
               className='h-10 w-full border border-stone-400 rounded-lg mb-4 focus:outline-none p-2' />
 
+              <Text>
+              On signing up, you agree to our 
+              <Text className='text-blue-600'> Terms of Service </Text>
+               and <Text className='text-blue-600'> Privacy Policy</Text>
+            </Text>
               <TouchableOpacity
                 disabled={loading}
                 onPress= {()=>clinicRegister(email, password)}
@@ -538,7 +547,7 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
             </>
           }
 
-
+          
             {
               loading && 
               <Loader/>
