@@ -4,6 +4,9 @@ import { useRouter } from 'expo-router';
 import { supabase } from '@/utils/supabase';
 import Toast from 'react-native-toast-message';
 import Loader from '../components/Loader';
+import { useAuth } from '@/hooks/useSessionContext';
+import { Session } from '@supabase/supabase-js';
+
 
 const Login = () => {
 
@@ -11,7 +14,7 @@ const Login = () => {
     const[email, setEmail] = useState<string>('')
     const[password, setPassword] = useState<string>('')
     const [loading, setLoading] = useState(false)
-
+  
 
   const handleLogin = async (email:string, password:string) => {
     setLoading(true)
@@ -32,6 +35,7 @@ const Login = () => {
 
     } 
     else {
+       
       router.push('/profiles')
      }
   }
