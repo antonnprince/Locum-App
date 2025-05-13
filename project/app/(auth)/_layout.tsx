@@ -4,7 +4,6 @@ import { Stack } from 'expo-router'
 const layout = () => {
   return (
     <Stack
-    // initialRouteName="/login"
         screenOptions={{headerShown:false}}
     />
   )

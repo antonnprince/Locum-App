@@ -2,29 +2,27 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { supabase } from "@/utils/supabase";
 import { Session } from "@supabase/supabase-js";
 
-// 1. Define types for context
+
 interface AuthContextType {
   session: Session | null;
   loading: boolean;
   fetchSession: () => Promise<void>;
 }
 
-// 2. Create context with proper type
-const AuthContext = createContext<AuthContextType | null>(null); // Ensure this is correctly defined and used
+ 
+const AuthContext = createContext<AuthContextType | null>(null);  
 
-// 3. Define props type for provider
+ 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-// 4. AuthProvider with correct types
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const getUserDetails = async() : Promise<void>=>{
-    setSession(null)
-  }
+
   const fetchSession = async () => {
     setLoading(true);
 
@@ -36,7 +34,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   useEffect(() => {
-    fetchSession(); // Fetch on app load
+    fetchSession(); 
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -45,7 +43,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const refreshInterval = setInterval(async () => {
       console.log("Refreshing session...");
       await supabase.auth.refreshSession();
-    }, 15 * 60 * 1000);
+    }, 60 * 1000);
 
     return () => {
       authListener.subscription.unsubscribe();
@@ -60,7 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 }
 
-// 5. useAuth hook with proper typing
+
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
