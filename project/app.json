@@ -2,6 +2,9 @@
   "expo": {
     "name": "MediShift",
     "slug": "bolt-expo-nativewind",
+    "android": {
+      "package": "com.medi.shift"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "myapp",
