@@ -71,11 +71,10 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
   const physicianRegister = async (e: string, p: string) : Promise<void> => {
     setLoading(true)
     if(!email.trim() || !name.trim() || !phone.trim() || !council.trim() || !registrationNumber || !mbbs
-    ||! cv ||!password ||!confirmpw
+    || !cv || !password ||!confirmpw
     || !medicalRegistrationDoc
     || !aadharCard )
     {
-      setLoading(false)
       Toast.show({
         type: "error",  // type of toast ('success', 'error', 'info', etc.)
         position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -84,12 +83,12 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
         visibilityTime: 3000,  // time to display the toast (in milliseconds)
         autoHide: true,  // auto hide after some time
       });
-      
+      setLoading(false)
       return
     }
     else if(password.length<6)
     {
-      setLoading(false)
+    
       Toast.show({
         type: "error",  // type of toast ('success', 'error', 'info', etc.)
         position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -98,11 +97,12 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
         visibilityTime: 3000,  // time to display the toast (in milliseconds)
         autoHide: true,  // auto hide after some time
       });
+        setLoading(false)
       return
     }
     else if(password.trim()!=confirmpw.trim())
     {
-      setLoading(false)
+    
       Toast.show({
         type: "error",  // type of toast ('success', 'error', 'info', etc.)
         position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -111,11 +111,11 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
         visibilityTime: 3000,  // time to display the toast (in milliseconds)
         autoHide: true,  // auto hide after some time
       });
+        setLoading(false)
       return
     }
     else if(phone.length!=10)
     {
-      setLoading(false)
       Toast.show({
         type: "error",  // type of toast ('success', 'error', 'info', etc.)
         position: "top",  // position of the toast ('top', 'bottom', 'center')
@@ -124,27 +124,27 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
         visibilityTime: 3000,  // time to display the toast (in milliseconds)
         autoHide: true,  // auto hide after some time
       });
+            setLoading(false)
+
       return    
     }
     
     else
     { 
-      const { data:result, error:err } = await supabase
-          .from('physicians')
-          .select('email')
-          .eq('email', email);
 
-        if (result && result.length > 0) {
-          Toast.show({
-            type: "error",
-            position: "top",
-            text1: "Email already exists!",
-            text2: "Please use a different email address",
-            visibilityTime: 3000,
-            autoHide: true,
-          });
-          setLoading(false);
-          return;
+    const {data:result} = await supabase.from("user_emails").select('email').eq('email',email)
+
+    if (result && result.length > 0) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Email already exists!",
+        text2: "Please use a different email address",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      setLoading(false);
+      return;
         }
 
       const { data, error } = await supabase.auth.signUp({
@@ -153,7 +153,7 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
       });
     
       if (data) {
-        const {data:result, error} = await supabase.from('physicians').insert([
+        const { error} = await supabase.from('physicians').insert([
          { 
           id:data?.user?.id,
           name: name,
@@ -198,6 +198,8 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
     
   };
 
+
+
  const clinicRegister = async (e: string, p: string) : Promise<void> => {
   setLoading(true)
   if(!email.trim() || !clinicName.trim() || !address.trim())
@@ -241,29 +243,27 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
     return
   }    
   else
-  { 
-    const { data:result, error:err } = await supabase
-        .from('clinic')
-        .select('email')
-        .eq('email', email);
+  {   
 
-      if (result && result.length > 0) {
-        Toast.show({
-          type: "error",
-          position: "top",
-          text1: "Email already exists!",
-          text2: "Please use a different email address",
-          visibilityTime: 3000,
-          autoHide: true,
-        });
-        setLoading(false);
-        return;
-      }
-
-    const { data, error } = await supabase.auth.signUp({
+    const {data:result} = await supabase.from("user_emails").select('email').eq('email',email)
+    if (result && result.length > 0) {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Email already exists!",
+        text2: "Please use a different email address",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      setLoading(false);
+      return;
+        }
+    
+      const { data, error } = await supabase.auth.signUp({
       email:e,
       password:p,
-    });
+     })
+    
   
     if (data) {
       const {data:result, error} = await supabase.from('clinic').insert([
@@ -276,7 +276,6 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
 
       ]
     )
-
     setLoading(false)
       Toast.show({
         type: "info",  // type of toast ('success', 'error', 'info', etc.)
@@ -290,7 +289,6 @@ const uploadPDFs = async (files: DocumentPicker.DocumentPickerAsset[], physician
     }        
 
     else if (error) {
-      console.log(error)
       Toast.show({
         type: "error",  // type of toast ('success', 'error', 'info', etc.)
         position: "top",  // position of the toast ('top', 'bottom', 'center')
